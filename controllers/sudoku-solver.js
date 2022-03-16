@@ -10,7 +10,7 @@ class SudokuSolver extends Stack {
 			if (puzzleString.length !== 81)
 				reject({ error: 'Expected puzzle to be 81 characters long' });
 			if (puzzleString.match(/[^1-9.]/)) reject({ error: 'Invalid characters in puzzle' });
-			resolve();
+			resolve(true);
 		});
 	}
 
@@ -69,38 +69,43 @@ class SudokuSolver extends Stack {
 		return possibilities;
 	}
 
-	solve(puzzleString) {
-		let copy = puzzleString.split('');
-		let index = 0;
+	async solve(puzzleString) {
+		try {
+			await this.validate(puzzleString);
+			let copy = puzzleString.split('');
+			let index = 0;
 
-		while (index < 81) {
-			if (copy[index] === '.') {
-				const possibilities = this.getPossibilities(copy, index);
-				if (possibilities.length === 1) copy[index] = possibilities[0];
-				else if (possibilities.length === 0) {
-					try {
-						this.update();
-					} catch (error) {
-						this.stack = [];
-						return false;
+			while (index < 81) {
+				if (copy[index] === '.') {
+					const possibilities = this.getPossibilities(copy, index);
+					if (possibilities.length === 1) copy[index] = possibilities[0];
+					else if (possibilities.length === 0) {
+						try {
+							this.update();
+						} catch (error) {
+							this.stack = [];
+							return false;
+						}
+						const top = this.peak();
+						copy = [
+							...copy.slice(0, top.index),
+							top.possibilities[top.current],
+							...puzzleString.slice(top.index + 1),
+						];
+						index = top.index + 1;
+						continue;
+					} else {
+						this.push({ index, possibilities, current: 0 });
+						copy[index] = possibilities[0];
 					}
-					const top = this.peak();
-					copy = [
-						...copy.slice(0, top.index),
-						top.possibilities[top.current],
-						...puzzleString.slice(top.index + 1),
-					];
-					index = top.index + 1;
-					continue;
-				} else {
-					this.push({ index, possibilities, current: 0 });
-					copy[index] = possibilities[0];
 				}
+				index++;
 			}
-			index++;
+			this.stack = [];
+			return copy.join('');
+		} catch (e) {
+			return false;
 		}
-		this.stack = [];
-		return copy.join('');
 	}
 }
 

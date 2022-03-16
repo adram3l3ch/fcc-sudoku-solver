@@ -30,7 +30,7 @@ module.exports = function (app) {
 				return;
 			}
 			await solver.validate(puzzleString);
-			const solution = solver.solve(puzzleString);
+			const solution = await solver.solve(puzzleString);
 			if (solution) res.json({ solution });
 			else res.json({ error: 'Puzzle cannot be solved' });
 		} catch (error) {
