@@ -7,7 +7,6 @@ class SudokuSolver extends Stack {
 
 	validate(puzzleString) {
 		return new Promise((resolve, reject) => {
-			if (!puzzleString) reject({ error: 'Required field missing' });
 			if (puzzleString.length !== 81)
 				reject({ error: 'Expected puzzle to be 81 characters long' });
 			if (puzzleString.match(/[^1-9.]/)) reject({ error: 'Invalid characters in puzzle' });
