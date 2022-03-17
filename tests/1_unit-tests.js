@@ -5,23 +5,15 @@ const Solver = require('../controllers/sudoku-solver.js');
 let solver = new Solver();
 
 suite('Unit Tests', () => {
-	test('Logic handles a valid puzzle string of 81 characters', async () => {
-		assert.isOk(
-			await solver.validate(
+	test('Logic handles a valid puzzle string of 81 characters', () => {
+		solver
+			.validate(
 				'1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'
-			),
-			'not accepting an unsolved valid puzzle'
-		);
-		assert.isOk(
-			await solver.validate(
-				'135762984946381257728459613694517832812936745357824196473298561581673429269145378'
-			),
-			'not accepting a solved valid puzzle'
-		);
-		assert.isOk(await solver.validate(new Array(81).fill('.').join('')));
+			)
+			.then(res => assert.isTrue(res));
 	});
 
-	test('Logic handles a puzzle string with invalid characters (not 1-9 or .)', async () => {
+	test('Logic handles a puzzle string with invalid characters (not 1-9 or .)', () => {
 		solver
 			.validate(
 				'1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16.?..926914.37.'
@@ -47,7 +39,7 @@ suite('Unit Tests', () => {
 			);
 	});
 
-	test('Logic handles a puzzle string that is not 81 characters in length', async () => {
+	test('Logic handles a puzzle string that is not 81 characters in length', () => {
 		solver
 			.validate(
 				'1.5..2.84..63.12.7.2..5...9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'
