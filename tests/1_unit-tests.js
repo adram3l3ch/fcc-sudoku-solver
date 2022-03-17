@@ -4,7 +4,7 @@ const assert = chai.assert;
 const Solver = require('../controllers/sudoku-solver.js');
 let solver = new Solver();
 
-suite('UnitTests', () => {
+suite('Unit Tests', () => {
 	test('Logic handles a valid puzzle string of 81 characters', async () => {
 		assert.isOk(
 			await solver.validate(
