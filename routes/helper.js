@@ -12,7 +12,8 @@ const checkConflicts = (puzzle, row, col, value) => {
 
 const extractColRow = (puzzle, value, coordinate) => {
 	return new Promise((resolve, reject) => {
-		if (+value > 9 || +value < 1 || isNaN(value)) reject({ error: 'Invalid value' });
+		if (+value > 9 || +value < 1 || (isNaN(value) && value !== undefined))
+			reject({ error: 'Invalid value' });
 		if (!value || !coordinate || !puzzle) reject({ error: 'Required field(s) missing' });
 		if (coordinate.length > 2) reject({ error: 'Invalid coordinate' });
 
